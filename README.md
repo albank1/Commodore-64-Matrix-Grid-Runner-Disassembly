@@ -1,6 +1,7 @@
 # Commodore-64-Matrix-Grid-Runner-Disassembly
 Disassembly of this game to enable modifications such as infinite lives
 Matrix
+![matrix](https://github.com/user-attachments/assets/7011a911-212f-4624-9392-3c263a4f5dff)
 
 matrix.asm is the disassembled matrix.prg code. I used ChatGPT, Claud.ai and
 also the disassembler JC64dis to disassemble the code.
