@@ -1,9 +1,27 @@
+;------------------------------------------------------------------------
+; MATRIX (1983) game by Jeff Minter, Llamasoft
+; This was originally distributed as a cartridge and tape
+; 
+; This is a disassembly of the game in order to look at increasing lives
+; or having infinite lives.
+; the game has a few bytes (screen codes) that are written to the top of the
+; screen and one of these is the number of lives you have and this is used as
+; the counter. As you die the number this value is decreased and then compared
+; to the screen code for 0.
+; To increase the number of lives change the $35 (5 lives) to $39 (9 lives)
+; To have infinite lives just change the code, DEC that reduces the number
+; You and use NOP, NOP, NOP to replace this DEC $0415
+;------------------------------------------------------------------------
+; To build and run use: dasm matrix additional lives.asm -o matrix.prg
+; Use LOAD "*",8,1 to load and they you have to type SYS 32777 ($8009)
+;------------------------------------------------------------------------
+
         processor 6502
         org $8000
 
 ; --- CBM80 cartridge header ---
-WarmVec: .word $8009           ; warm start vector
-ColdVec: .word $8009           ; cold start vector
+WarmVec: .word Start           ; warm start vector
+ColdVec: .word Start           ; cold start vector
         .byte $C3,$C2,$CD,$38,$30    ; "CBM80" (PETSCII, high bit set)
 
 ; --- Code entry ---
@@ -144,7 +162,7 @@ L80FB:
         JSR L9880
         JMP L81BC
         .byte $23,$24,$22,$25,$26,$27,$20,$19,$1A,$20,$30,$30,$30,$30,$30,$30
-	;byte $30,$20,$20,$07,$20,$35 this last byte is the number of ships
+	;                         $35 this byte is the number of lives (ships)
         .byte $30,$20,$20,$07,$20,$39,$20,$53,$48,$49,$50,$53,$20,$52,$45,$4D
         .byte $41,$49,$4E,$49,$4E,$47,$20,$20,$21,$21,$21,$21,$21,$21,$43,$43
         .byte $43,$43,$43,$43,$40,$44,$44,$40,$47,$47,$47,$47,$47,$47,$47,$40
@@ -2826,8 +2844,8 @@ L962F:
         LDA $0415
         CMP #$30  ;compare to 0
         BEQ L963C
-        JMP L966C ;game ends
-L963C:
+        JMP L966C 
+L963C:		  ;game ends
         JMP L9A56
 L963F:
         LDA #$20
